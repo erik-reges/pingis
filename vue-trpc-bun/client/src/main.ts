@@ -15,14 +15,7 @@ import 'primeicons/primeicons.css' // icons
 import '/node_modules/primeflex/primeflex.css' // utility CSS
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia } from 'pinia'
-import { initializeApp } from 'firebase/app'
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyAlNdN1eGLmEWSyW1uI4JhH_MnIBBD8irw',
-  authDomain: 'reges-cloud.firebaseapp.com',
-}
-
-initializeApp(firebaseConfig)
 const app = createApp(App)
 const pinia = createPinia()
 
