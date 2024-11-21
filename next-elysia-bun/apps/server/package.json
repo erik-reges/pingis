@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.50",
+  "scripts": {
+    "generate": "drizzle-kit generate:pg",
+    "migrate": "bun run src/db/migrate.ts",
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@bogeychan/elysia-logger": "^0.1.4",
+    "@electric-sql/pglite": "^0.2.13",
+    "@elysiajs/cors": "^1.1.1",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.3",
+    "elysia": "latest",
+    "teslo": "^0.5.2"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}
