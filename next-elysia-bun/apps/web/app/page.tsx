@@ -1,4 +1,4 @@
-import { LandingPage } from "@/components/landing-page";
+import { Pingis } from "@/components/pingis";
 import { api } from "@/lib/eden";
 import { Metadata } from "next";
 
@@ -13,7 +13,7 @@ export default async function Page() {
 
   return (
     <div className="min-h-screen font-geist-sans">
-      <LandingPage players={players} matches={matches} />
+      <Pingis players={players} matches={matches} />
     </div>
   );
 }

@@ -47,8 +47,10 @@ const app = new Elysia()
 
   .post(
     "/matches",
-    async ({ body, log, set }) => {
+    async ({ body, log, set, request }) => {
       log.info(`Recording match: ${body.player1Name} vs ${body.player2Name}`);
+
+      log.info(request);
 
       const [player1] = await db
         .select()

@@ -8,15 +8,25 @@ const auth = useAuthStore()
 const router = useRouter()
 const { user, loading } = storeToRefs(auth)
 
-watch([user, loading], ([newUser, newLoading]) => {
-  if (!newLoading && !newUser) {
-    router.push('/login')
-  }
-})
+watch(
+  [user, loading],
+  ([newUser, newLoading]) => {
+    if (!newLoading && !newUser) {
+      router.push('/login')
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
-  <div v-if="loading" class="flex justify-center items-center min-h-screen">Loading...</div>
-  <slot v-else-if="user" />
-  <div v-else class="flex justify-center items-center min-h-screen">Redirecting to login...</div>
+  <template v-if="loading">
+    <div class="flex justify-center items-center min-h-screen">Loading...</div>
+  </template>
+  <template v-else-if="user">
+    <slot />
+  </template>
+  <template v-else>
+    <div class="flex justify-center items-center min-h-screen">Redirecting to login...</div>
+  </template>
 </template>
