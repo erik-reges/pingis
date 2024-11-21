@@ -1,0 +1,1483 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.schema_migrations": {
+      "name": "schema_migrations",
+      "schema": "",
+      "columns": {
+        "version": {
+          "name": "version",
+          "type": "varchar(128)",
+          "primaryKey": true,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.time_entry": {
+      "name": "time_entry",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at_utc": {
+          "name": "updated_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time_start": {
+          "name": "time_start",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time_end": {
+          "name": "time_end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "time_entry_idx": {
+          "name": "time_entry_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "time_entry_created_by_fkey": {
+          "name": "time_entry_created_by_fkey",
+          "tableFrom": "time_entry",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "time_entry_updated_by_fkey": {
+          "name": "time_entry_updated_by_fkey",
+          "tableFrom": "time_entry",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fk_user_id": {
+          "name": "fk_user_id",
+          "tableFrom": "time_entry",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.commit": {
+      "name": "commit",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(200)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "commit_created_at": {
+          "name": "commit_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "repo": {
+          "name": "repo",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "branch": {
+          "name": "branch",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "author": {
+          "name": "author",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_entry_id": {
+          "name": "time_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "commit_app_user_idx": {
+          "name": "commit_app_user_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "commit_idx": {
+          "name": "commit_idx",
+          "columns": [
+            {
+              "expression": "time_entry_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "commit_time_entry_id_fkey": {
+          "name": "commit_time_entry_id_fkey",
+          "tableFrom": "commit",
+          "tableTo": "time_entry",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "time_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.customer": {
+      "name": "customer",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at_utc": {
+          "name": "updated_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email_domains": {
+          "name": "email_domains",
+          "type": "varchar[]",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "customer_created_by_fkey": {
+          "name": "customer_created_by_fkey",
+          "tableFrom": "customer",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "customer_updated_by_fkey": {
+          "name": "customer_updated_by_fkey",
+          "tableFrom": "customer",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.system": {
+      "name": "system",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at_utc": {
+          "name": "updated_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "system_created_by_fkey": {
+          "name": "system_created_by_fkey",
+          "tableFrom": "system",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "system_updated_by_fkey": {
+          "name": "system_updated_by_fkey",
+          "tableFrom": "system",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.outgoing_email": {
+      "name": "outgoing_email",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at_utc": {
+          "name": "updated_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "recipient": {
+          "name": "recipient",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time_entry_id": {
+          "name": "time_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "web_link": {
+          "name": "web_link",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "desktop_link": {
+          "name": "desktop_link",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "outgoing_email_time_entry_idx": {
+          "name": "outgoing_email_time_entry_idx",
+          "columns": [
+            {
+              "expression": "time_entry_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "outgoing_email_created_by_fkey": {
+          "name": "outgoing_email_created_by_fkey",
+          "tableFrom": "outgoing_email",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "outgoing_email_updated_by_fkey": {
+          "name": "outgoing_email_updated_by_fkey",
+          "tableFrom": "outgoing_email",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "outgoing_email_time_entry_id_fkey": {
+          "name": "outgoing_email_time_entry_id_fkey",
+          "tableFrom": "outgoing_email",
+          "tableTo": "time_entry",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "time_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.issue": {
+      "name": "issue",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(200)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "account_id": {
+          "name": "account_id",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "issue_created_at": {
+          "name": "issue_created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "issue_type": {
+          "name": "issue_type",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.change_log_entry": {
+      "name": "change_log_entry",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at_utc": {
+          "name": "updated_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "category_id": {
+          "name": "category_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "system_id": {
+          "name": "system_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "change_log_entry_category_idx": {
+          "name": "change_log_entry_category_idx",
+          "columns": [
+            {
+              "expression": "category_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "change_log_entry_system_idx": {
+          "name": "change_log_entry_system_idx",
+          "columns": [
+            {
+              "expression": "system_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "change_log_entry_created_by_fkey": {
+          "name": "change_log_entry_created_by_fkey",
+          "tableFrom": "change_log_entry",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "change_log_entry_updated_by_fkey": {
+          "name": "change_log_entry_updated_by_fkey",
+          "tableFrom": "change_log_entry",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fk_change_log_entries_category_id": {
+          "name": "fk_change_log_entries_category_id",
+          "tableFrom": "change_log_entry",
+          "tableTo": "category",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "fk_change_log_entries_system_id": {
+          "name": "fk_change_log_entries_system_id",
+          "tableFrom": "change_log_entry",
+          "tableTo": "system",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "system_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.category": {
+      "name": "category",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at_utc": {
+          "name": "updated_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "category_created_by_fkey": {
+          "name": "category_created_by_fkey",
+          "tableFrom": "category",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "category_updated_by_fkey": {
+          "name": "category_updated_by_fkey",
+          "tableFrom": "category",
+          "tableTo": "app_user",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.app_user": {
+      "name": "app_user",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "provider_id": {
+          "name": "provider_id",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "associated_emails": {
+          "name": "associated_emails",
+          "type": "varchar(200)[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "app_user_email_key": {
+          "columns": [
+            "email"
+          ],
+          "nullsNotDistinct": false,
+          "name": "app_user_email_key"
+        }
+      }
+    },
+    "public.commit_issue": {
+      "name": "commit_issue",
+      "schema": "",
+      "columns": {
+        "commit_id": {
+          "name": "commit_id",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "issue_id": {
+          "name": "issue_id",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "commit_issue_id_idx": {
+          "name": "commit_issue_id_idx",
+          "columns": [
+            {
+              "expression": "commit_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            },
+            {
+              "expression": "issue_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_commit_issue_commit_id": {
+          "name": "fk_commit_issue_commit_id",
+          "tableFrom": "commit_issue",
+          "tableTo": "commit",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "commit_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "fk_commit_issue_issue_id": {
+          "name": "fk_commit_issue_issue_id",
+          "tableFrom": "commit_issue",
+          "tableTo": "issue",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "issue_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "commit_issue_pkey": {
+          "name": "commit_issue_pkey",
+          "columns": [
+            "commit_id",
+            "issue_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.time_entry_customer": {
+      "name": "time_entry_customer",
+      "schema": "",
+      "columns": {
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time_entry_id": {
+          "name": "time_entry_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "time_entry_customer_customer_idx": {
+          "name": "time_entry_customer_customer_idx",
+          "columns": [
+            {
+              "expression": "customer_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "time_entry_customer_time_entry_idx": {
+          "name": "time_entry_customer_time_entry_idx",
+          "columns": [
+            {
+              "expression": "time_entry_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_time_entry_customer_id": {
+          "name": "fk_time_entry_customer_id",
+          "tableFrom": "time_entry_customer",
+          "tableTo": "customer",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "fk_time_entry_customer_time_entry_id": {
+          "name": "fk_time_entry_customer_time_entry_id",
+          "tableFrom": "time_entry_customer",
+          "tableTo": "time_entry",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "time_entry_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "time_entry_customer_pkey": {
+          "name": "time_entry_customer_pkey",
+          "columns": [
+            "customer_id",
+            "time_entry_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.change_log_entry_customer": {
+      "name": "change_log_entry_customer",
+      "schema": "",
+      "columns": {
+        "change_log_entries_id": {
+          "name": "change_log_entries_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "change_log_entry_customers_customer_idx": {
+          "name": "change_log_entry_customers_customer_idx",
+          "columns": [
+            {
+              "expression": "customer_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "change_log_entry_customers_entries_idx": {
+          "name": "change_log_entry_customers_entries_idx",
+          "columns": [
+            {
+              "expression": "change_log_entries_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_change_log_entries_customers_change_log_entries_id": {
+          "name": "fk_change_log_entries_customers_change_log_entries_id",
+          "tableFrom": "change_log_entry_customer",
+          "tableTo": "change_log_entry",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "change_log_entries_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "fk_change_log_entries_customers_customer_id": {
+          "name": "fk_change_log_entries_customers_customer_id",
+          "tableFrom": "change_log_entry_customer",
+          "tableTo": "customer",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "change_log_entry_customer_pkey": {
+          "name": "change_log_entry_customer_pkey",
+          "columns": [
+            "change_log_entries_id",
+            "customer_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.customer_issue": {
+      "name": "customer_issue",
+      "schema": "",
+      "columns": {
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "issue_id": {
+          "name": "issue_id",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "customer_issue_customer_idx": {
+          "name": "customer_issue_customer_idx",
+          "columns": [
+            {
+              "expression": "customer_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "customer_issue_issue_idx": {
+          "name": "customer_issue_issue_idx",
+          "columns": [
+            {
+              "expression": "issue_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "text_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_customer_issues_customer_id": {
+          "name": "fk_customer_issues_customer_id",
+          "tableFrom": "customer_issue",
+          "tableTo": "customer",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "fk_customer_issues_issue_id": {
+          "name": "fk_customer_issues_issue_id",
+          "tableFrom": "customer_issue",
+          "tableTo": "issue",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "issue_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "customer_issue_pkey": {
+          "name": "customer_issue_pkey",
+          "columns": [
+            "customer_id",
+            "issue_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.customer_system": {
+      "name": "customer_system",
+      "schema": "",
+      "columns": {
+        "system_id": {
+          "name": "system_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "customer_id": {
+          "name": "customer_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at_utc": {
+          "name": "created_at_utc",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "(CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text)"
+        }
+      },
+      "indexes": {
+        "customers_system_customer_idx": {
+          "name": "customers_system_customer_idx",
+          "columns": [
+            {
+              "expression": "customer_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "customers_system_system_idx": {
+          "name": "customers_system_system_idx",
+          "columns": [
+            {
+              "expression": "system_id",
+              "asc": true,
+              "nulls": "last",
+              "opclass": "uuid_ops",
+              "isExpression": false
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fk_customer_systems_customer_id": {
+          "name": "fk_customer_systems_customer_id",
+          "tableFrom": "customer_system",
+          "tableTo": "customer",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "customer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "fk_customer_systems_system_id": {
+          "name": "fk_customer_systems_system_id",
+          "tableFrom": "customer_system",
+          "tableTo": "system",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "system_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "customer_system_pkey": {
+          "name": "customer_system_pkey",
+          "columns": [
+            "system_id",
+            "customer_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {
+      "time_entry": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "commit": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "customer": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "email_domains": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "character varying"
+          }
+        }
+      },
+      "system": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "outgoing_email": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "issue": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "change_log_entry": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "category": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "updated_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      },
+      "app_user": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          },
+          "associated_emails": {
+            "isArray": true,
+            "dimensions": 1,
+            "rawType": "character varying(200)"
+          }
+        }
+      },
+      "customer_system": {
+        "columns": {
+          "created_at_utc": {
+            "isDefaultAnExpression": true
+          }
+        }
+      }
+    }
+  }
+}

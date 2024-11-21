@@ -1,0 +1,30 @@
+{
+  "name": "@hub/core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "core stuff",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "generate": "drizzle-kit generate:pg",
+    "push": "drizzle-kit push:pg",
+    "introspect": "drizzle-kit introspect",
+    "drop": "drizzle-kit drop"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^4.7.2",
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.3",
+    "drizzle-typebox": "^0.1.1",
+    "elysia": "^1.1.25",
+    "pg": "^8.12.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.10",
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
