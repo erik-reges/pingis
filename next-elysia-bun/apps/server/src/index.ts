@@ -31,7 +31,6 @@ const app = new Elysia()
         .insert(players)
         .values({
           name: body.name,
-          email: body.email,
           elo: "1000",
         })
         .returning();
@@ -40,7 +39,6 @@ const app = new Elysia()
     {
       body: t.Object({
         name: t.String(),
-        email: t.String(),
       }),
     },
   )

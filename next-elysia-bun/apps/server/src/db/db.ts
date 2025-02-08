@@ -4,11 +4,12 @@ import * as schema from "./schema";
 
 const client = new PGlite({ dataDir: "pglite" });
 export const db = drizzle({ client, schema });
+
+// Fix the CREATE TABLE queries
 await client.query(`
   CREATE TABLE IF NOT EXISTS players (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name TEXT NOT NULL UNIQUE,
-    email TEXT NOT NULL UNIQUE,
     elo NUMERIC NOT NULL DEFAULT 1000,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   );
@@ -16,7 +17,7 @@ await client.query(`
 
 await client.query(`
   CREATE TABLE IF NOT EXISTS matches (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     player1_id INTEGER NOT NULL REFERENCES players(id),
     player2_id INTEGER NOT NULL REFERENCES players(id),
     player1_score INTEGER NOT NULL,

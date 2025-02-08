@@ -11,6 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUpDown, Trophy, TableIcon as TableTennis } from "lucide-react";
 import { format } from "date-fns";
@@ -25,7 +32,6 @@ export function Pingis({
     | {
         id: number;
         name: string;
-        email: string;
         elo: string;
         createdAt: Date;
       }[]
@@ -89,24 +95,53 @@ export function Pingis({
             <CardHeader>
               <CardTitle className="flex items-center">
                 <TableTennis className="mr-3" />
-                Register Match
+                Register match
               </CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <Input
-                    placeholder="Player 1"
+                  <Select
                     value={player1}
-                    onChange={(e) => setPlayer1(e.target.value)}
+                    onValueChange={(value) => setPlayer1(value)}
                     required
-                  />
-                  <Input
-                    placeholder="Player 2"
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Player 1" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {players?.map((player) => (
+                        <SelectItem
+                          key={player.id}
+                          value={player.name}
+                          disabled={player.name === player2}
+                        >
+                          {player.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Select
                     value={player2}
-                    onChange={(e) => setPlayer2(e.target.value)}
+                    onValueChange={(value) => setPlayer2(value)}
                     required
-                  />
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Player 2" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {players?.map((player) => (
+                        <SelectItem
+                          key={player.id}
+                          value={player.name}
+                          disabled={player.name === player1}
+                        >
+                          {player.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <Input
@@ -147,8 +182,10 @@ export function Pingis({
                   <TableRow>
                     <TableHead className="w-[50px]">Rank</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead className="text-right">W</TableHead>
-                    <TableHead className="text-right">L</TableHead>
+                    <TableHead className="text-right text-green-600">
+                      W
+                    </TableHead>
+                    <TableHead className="text-right text-red-600">L</TableHead>
                     <TableHead className="text-right">Win%</TableHead>
                     <TableHead className="text-right">Elo</TableHead>
                   </TableRow>
@@ -156,7 +193,7 @@ export function Pingis({
                 <TableBody>
                   {players
                     ?.sort((a, b) => Number(b.elo) - Number(a.elo))
-                    .slice(0, 5)
+                    .slice(0, 10)
                     .map((player, index) => {
                       const playerMatches =
                         matches?.filter(
@@ -181,7 +218,7 @@ export function Pingis({
 
                       return (
                         <TableRow key={player.id}>
-                          <TableCell className="font-medium">
+                          <TableCell className="font-medium text-center">
                             {index + 1}
                           </TableCell>
                           <TableCell>{player.name}</TableCell>
@@ -207,7 +244,7 @@ export function Pingis({
             <CardHeader>
               <CardTitle className="flex items-center">
                 <ArrowUpDown className="mr-3" />
-                Latest Matches
+                Latest matches
               </CardTitle>
             </CardHeader>
             <CardContent>
